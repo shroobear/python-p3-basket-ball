@@ -182,3 +182,61 @@ def game_dict():
             ]
         }
     }
+
+def get_all_players():
+    all_players = game_dict()['home']['players'] + game_dict()['away']['players']
+    return all_players
+
+def get_player(player):
+    for index in range(len(get_all_players())):
+        if player == get_all_players()[index]['name']:
+            print(get_all_players()[index])
+            return get_all_players()[index]
+    print(f'{player} not found.')
+
+def num_points_per_game(player):
+    return get_player(player)['points_per_game']
+
+def player_age(player):
+    return get_player(player)['age']
+
+def team_colors(team_name):
+    teams = game_dict()
+    if team_name == teams['home']['team_name']:
+        return teams['home']['colors']
+    if team_name == teams['away']['team_name']:
+        return teams['away']['colors']
+
+def team_names():
+    teams = [game_dict()['home']['team_name'], game_dict()['away']['team_name']]
+    return teams
+
+def player_numbers(team):
+    jersey_list = []
+    teams = game_dict()
+    if team == teams['home']['team_name']:
+        for index in range(len(teams['home']['players'])):
+            jersey_list.append(teams['home']['players'][index]['number'])
+        return jersey_list
+    elif team == teams['away']['team_name']:
+        for index in range(len(teams['away']['players'])):
+            jersey_list.append(teams['away']['players'][index]['number'])
+        return jersey_list
+
+def player_stats(player):
+    return get_player(player)
+
+def average_rebounds_by_shoe_brand():
+    shoe_brands_dict = {}
+    for player in get_all_players():
+        shoe_brand = player['shoe_brand']
+        rebounds = player['rebounds_per_game']
+        if shoe_brand in shoe_brands_dict:
+            shoe_brands_dict[shoe_brand].append(rebounds)
+        else:
+            shoe_brands_dict[shoe_brand] = [rebounds]
+    for shoe_brand, rebounds_list in shoe_brands_dict.items():
+        average_rebounds = sum(rebounds_list) / len(rebounds_list)
+        print(f'{shoe_brand}: {average_rebounds: .2f}')
+
+average_rebounds_by_shoe_brand()
